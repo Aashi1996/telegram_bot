@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Interface</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            margin-bottom: 20px;
+        }
+
+        .user-message {
+            background-color: #d3e1f2;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .bot-message {
+            background-color: #eaf6e9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .input-container {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .input-field {
+            flex-grow: 1;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .send-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Chat Interface!</h1>
+
+        <div class="message">
+            <div class="bot-message">
+                <p>Bot Message 1</p>
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="user-message">
+                <p>User Message 1</p>
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="bot-message">
+                <p>Bot Message 2</p>
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="user-message">
+                <p>User Message 2</p>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="chat-button" onclick="sendMessage('stupid')">Stupid</button>
+            <button class="chat-button" onclick="sendMessage('fat')">Fat</button>
+            <button class="chat-button" onclick="sendMessage('dumb')">Dumb</button>
+        </div>
+
+    </div>
+
+    <script>
+        // JavaScript code for handling user input and sending messages
+        const chatButtons = document.querySelectorAll('.chat-button');
+
+        chatButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const message = button.textContent;
+                fetchJoke(message);
+            });
+        });
+
+        function fetchJoke(buttonName) {
+            fetch(`/get_joke/${buttonName}`)
+                .then(response => response.json())
+                .then(data => {
+                    const messageContainer = document.createElement('div');
+                    const userMessage = document.createElement('div');
+                    userMessage.classList.add('user-message');
+                    userMessage.innerHTML = `<p>${buttonName}</p>`;
+                    messageContainer.appendChild(userMessage);
+
+                    const botMessage = document.createElement('div');
+                    botMessage.classList.add('bot-message');
+                    botMessage.innerHTML = `<p>${data.joke}</p>`;
+                    messageContainer.appendChild(botMessage);
+
+                    const chatContainer = document.querySelector('.container');
+                    chatContainer.insertBefore(messageContainer, chatContainer.lastChild);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function sendMessage(buttonName) {
+
+            fetch(`/get_joke/${buttonName}`)
+                .then(response => response.json())
+                .then(data => {
+                  const messageContainer = document.createElement('div');
+                  
+                  const userMessage = document.createElement('div');
+                  userMessage.classList.add('user-message');
+                  userMessage.innerHTML = `<p>${buttonName}</p>`;
+                  messageContainer.appendChild(userMessage);
+                  
+                  const botMessage = document.createElement('div');
+                  botMessage.classList.add('bot-message');
+                  botMessage.innerHTML = `<p>${data.joke}</p>`; // Use the joke from the response
+                  messageContainer.appendChild(botMessage);
+                  
+                  const chatContainer = document.querySelector('.container');
+                  chatContainer.insertBefore(messageContainer, chatContainer.lastChild);
+                  chatContainer.scrollTop = chatContainer.scrollHeight;
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                });
+        }
+
+    </script>
+</body>
+</html>

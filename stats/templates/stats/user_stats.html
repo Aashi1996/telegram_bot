@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Statistics</title>
+</head>
+<body>
+    <h1>User Statistics</h1>
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Total Calls</th>
+        </tr>
+        {% for user_stat in user_stats %}
+        <tr>
+            <td>{{ user_stat.user.username }}</td>
+            <td>{{ user_stat.get_total_calls }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
